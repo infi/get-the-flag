@@ -4,7 +4,12 @@ A simple JS canvas game, almost without libraries.
 
 You are a player that can freely move in 2D space. The objective is to touch a certain random point (the "flag"), after which your movement speed gets faster, your score is incremented, and the flag gets randomly relocated.
 
-Use WASD or the arrow keys to move.
+Use WASD or the arrow keys to move.  
+  
+## Upcoming
+
+ - Mobile controls
+ - Confetti effect when a flag gets captured
   
 ## Live
 
