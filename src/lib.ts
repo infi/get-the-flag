@@ -53,8 +53,17 @@ const hsvToHex = (h: number, s: number, v: number) => {
     return rgbToHex(rgb.r, rgb.g, rgb.b)
 }
 
+/**
+ * Ease function
+ * @param x Number between 0 (0%) and 1 (100%)
+ */
+const easeInOutQuart = (x: number) => {
+    return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
+}
+
 export default {
     getHeight, getWidth, getHeightS, getWidthS,
     hsvToRgb, rgbToHex, hsvToHex,
-    isMobile
+    isMobile,
+    easeInOutQuart
 }
