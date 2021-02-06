@@ -5,7 +5,7 @@ const x = document.getElementById("x")
 const ctx: CanvasRenderingContext2D = (x as any).getContext("2d")
 
 const PADDING = 20
-const DEBUG_OUTPUT = false
+const DEBUG_OUTPUT = new URLSearchParams(window.location.search).has("debug")
 
 let playerstate = {
     x: Math.floor(Math.random() * lib.getWidth()),
@@ -98,6 +98,7 @@ const drawDebug = () => {
     ctx.font = "normal 400 1rem monospace"
     const debugPs = JSON.parse(JSON.stringify(playerstate))
     delete debugPs.hue
+    delete debugPs.emRadius
 
     debugPs.up = up
     debugPs.down = down
@@ -105,17 +106,21 @@ const drawDebug = () => {
     debugPs.right = right
 
     ctx.fillText(JSON.stringify(debugPs), lib.getWidth() - (PADDING + 5), PADDING + 5)
+    ctx.textAlign = "left"
+    ctx.fillText("Debug Mode may slow down your game slightly", PADDING + 5, PADDING + 35)
     ctx.textBaseline = oldBaseline
 }
 
 const drawHint = () => {
-    if (playerstate.moved) return
-    const measured = ctx.measureText("Move with the arrow keys or WASD")
+    if (playerstate.moved && flagstate.gotTimes >= 1) return
+
+    const hintText = playerstate.moved ? "The more flags you get, the faster you move." : "Move with the arrow keys or WASD"
+    const measured = ctx.measureText(hintText)
     ctx.fillStyle = "#eeeeee"
     ctx.fillRect(PADDING + 7.5, lib.getHeight() - PADDING - 35, measured.width + 5, 27.5)
     ctx.fillStyle = lib.hsvToHex(flagstate.hue, 1, .7)
     ctx.font = "normal 700 1.5rem Chakra Petch"
-    ctx.fillText("Move with the arrow keys or WASD", PADDING + 10, lib.getHeight() - PADDING - 15)
+    ctx.fillText(hintText, PADDING + 10, lib.getHeight() - PADDING - 15)
 }
 
 // Code for mobile gamepad buttons, which are coming at some later point. Unused
@@ -217,6 +222,7 @@ const frame = () => {
     }
 
     if (playerstate.em) playerstate.emRadius -= 1.7
+    if (playerstate.emRadius < 5) playerstate.emRadius = 5
 
     requestAnimationFrame(frame)
 }
